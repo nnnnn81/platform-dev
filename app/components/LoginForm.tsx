@@ -1,12 +1,20 @@
+'use client';
+import { useRouter } from 'next/navigation';
+
 export const LoginForm = () => {
+  const router = useRouter();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // ログイン処理を追加
+    router.push('/dashboard/user'); // ログイン成功後にユーザーのダッシュボードへ遷移
+  };
+
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
-      <div className="card-body">
-        <h2 className="card-title">Login</h2>
-        <input type="text" placeholder="Email" className="input input-bordered w-full mb-4" />
-        <input type="password" placeholder="Password" className="input input-bordered w-full mb-4" />
-        <button className="btn btn-primary w-full">Login</button>
-      </div>
-    </div>
+    <form onSubmit={handleLogin}>
+      <input type="text" placeholder="Email" className="input input-bordered w-full mb-4" required />
+      <input type="password" placeholder="Password" className="input input-bordered w-full mb-4" required />
+      <button type="submit" className="btn btn-primary w-full">Login</button>
+    </form>
   );
 };
