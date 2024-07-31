@@ -1,7 +1,11 @@
+import { LoginForm } from './components/LoginForm';
 
-
-export default function Home() {
+const Home = () => {
   return (
-    <button className="btn">aaa</button>
+    <div className="flex items-center justify-center h-screen">
+      <LoginForm />
+    </div>
   );
-}
+};
+
+export default Home;
