@@ -1,5 +1,5 @@
-import { DashboardSidebar } from '../components/Sidebar';
-import { DashboardContent } from '../components/Dashboard';
+import { DashboardSidebar } from '../../components/Sidebar';
+import { DashboardContent } from '../../components/Dashboard';
 
 const UserDashboardPage = () => {
   return (
