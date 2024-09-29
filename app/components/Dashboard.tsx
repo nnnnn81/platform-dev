@@ -1,7 +1,7 @@
 export const DashboardContent = () => {
   return (
     <div className="flex-grow p-6">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title">申請一覧</h2>
@@ -12,12 +12,6 @@ export const DashboardContent = () => {
           <div className="card-body">
             <h2 className="card-title">お知らせ</h2>
             {/* お知らせの内容 */}
-          </div>
-        </div>
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">各種設定</h2>
-            {/* 各種設定の内容 */}
           </div>
         </div>
       </div>
