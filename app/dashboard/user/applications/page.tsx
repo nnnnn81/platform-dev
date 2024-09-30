@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
 import { ApplicationList } from '@/app/components/application/ApplicationList';
 import Link from 'next/link';
@@ -15,7 +15,6 @@ const UserApplicationPage = () => {
   const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
-
     const fetchApplications = async () => {
       const response = await fetch('/api/applications', {
         method: 'GET',
@@ -33,6 +32,7 @@ const UserApplicationPage = () => {
     };
     fetchApplications();
   }, []);
+
   const pendingApplications = applications.filter(app => app.status === 'PENDING');
   const pastApplications = applications.filter(app => app.status !== 'PENDING');
 
@@ -49,14 +49,22 @@ const UserApplicationPage = () => {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">現在申請中</h2>
           <div className="bg-white p-4 rounded shadow">
-            <ApplicationList applications={pendingApplications} />
+            {pendingApplications.length === 0 ? (
+              <p className="text-gray-500">現在、申請中のものはありません。</p>
+            ) : (
+              <ApplicationList applications={pendingApplications} />
+            )}
           </div>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold mb-2">過去の申請</h2>
           <div className="bg-white p-4 rounded shadow">
-            <ApplicationList applications={pastApplications} />
+            {pastApplications.length === 0 ? (
+              <p className="text-gray-500">過去の申請はありません。</p>
+            ) : (
+              <ApplicationList applications={pastApplications} />
+            )}
           </div>
         </section>
       </div>

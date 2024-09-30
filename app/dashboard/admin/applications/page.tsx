@@ -9,7 +9,6 @@ interface Application {
   purpose: string;
   amount: number;
   status: string;
-  // その他のプロパティも必要に応じて追加
 }
 
 const AdminApplicationsPage = () => {
@@ -52,7 +51,7 @@ const AdminApplicationsPage = () => {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-      }); // すべての申請を取得
+      });
       if (response.ok) {
         const data = await response.json();
         setApplications(data);
@@ -77,7 +76,6 @@ const AdminApplicationsPage = () => {
     if (response.ok) {
       const updatedApplication = await response.json();
       if (updatedApplication && updatedApplication.id) {
-        // ステータスが正常に更新された場合のみアプリケーションリストを更新
         setApplications((prev) =>
           prev.map((app) => (app.id === id ? updatedApplication : app))
         );
@@ -96,66 +94,74 @@ const AdminApplicationsPage = () => {
 
   return (
     <div className="flex h-screen">
-      <DashboardSidebar userType="user" />
+      <DashboardSidebar userType="admin" />
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-2xl font-bold mb-6">申請一覧</h1>
 
         {/* 現在申請中の申請 */}
         <h2 className="text-xl font-semibold mb-4">現在申請中</h2>
-        <table className="min-w-full bg-white border border-gray-300 mb-6">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">用途</th>
-              <th className="py-2 px-4 border-b">金額</th>
-              <th className="py-2 px-4 border-b">ステータス</th>
-              <th className="py-2 px-4 border-b">アクション</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pendingApplications.map((application) => (
-              <tr key={application.id}>
-                <td className="py-2 px-4 border-b">{application.purpose}</td>
-                <td className="py-2 px-4 border-b">{application.amount}</td>
-                <td className="py-2 px-4 border-b">{application.status}</td>
-                <td className="py-2 px-4 border-b">
-                  <button
-                    onClick={() => handleUpdateStatus(application.id, 'APPROVED')}
-                    className="mr-2 text-green-600 hover:underline"
-                  >
-                    承認
-                  </button>
-                  <button
-                    onClick={() => handleUpdateStatus(application.id, 'REJECTED')}
-                    className="text-red-600 hover:underline"
-                  >
-                    却下
-                  </button>
-                </td>
+        {pendingApplications.length === 0 ? (
+          <p className="text-gray-500">現在、申請中のものはありません。</p>
+        ) : (
+          <table className="min-w-full bg-white border border-gray-300 mb-6">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">用途</th>
+                <th className="py-2 px-4 border-b">金額</th>
+                <th className="py-2 px-4 border-b">ステータス</th>
+                <th className="py-2 px-4 border-b">アクション</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pendingApplications.map((application) => (
+                <tr key={application.id}>
+                  <td className="py-2 px-4 border-b">{application.purpose}</td>
+                  <td className="py-2 px-4 border-b">{application.amount}</td>
+                  <td className="py-2 px-4 border-b">{application.status}</td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      onClick={() => handleUpdateStatus(application.id, 'APPROVED')}
+                      className="mr-2 text-green-600 hover:underline"
+                    >
+                      承認
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(application.id, 'REJECTED')}
+                      className="text-red-600 hover:underline"
+                    >
+                      却下
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
 
         {/* 履歴セクション */}
         <h2 className="text-xl font-semibold mb-4">申請履歴</h2>
-        <table className="min-w-full bg-white border border-gray-300">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">用途</th>
-              <th className="py-2 px-4 border-b">金額</th>
-              <th className="py-2 px-4 border-b">ステータス</th>
-            </tr>
-          </thead>
-          <tbody>
-            {historyApplications.map((application) => (
-              <tr key={application.id}>
-                <td className="py-2 px-4 border-b">{application.purpose}</td>
-                <td className="py-2 px-4 border-b">{application.amount}</td>
-                <td className="py-2 px-4 border-b">{application.status}</td>
+        {historyApplications.length === 0 ? (
+          <p className="text-gray-500">申請履歴はありません。</p>
+        ) : (
+          <table className="min-w-full bg-white border border-gray-300">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">用途</th>
+                <th className="py-2 px-4 border-b">金額</th>
+                <th className="py-2 px-4 border-b">ステータス</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {historyApplications.map((application) => (
+                <tr key={application.id}>
+                  <td className="py-2 px-4 border-b">{application.purpose}</td>
+                  <td className="py-2 px-4 border-b">{application.amount}</td>
+                  <td className="py-2 px-4 border-b">{application.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

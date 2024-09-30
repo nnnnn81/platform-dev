@@ -1,10 +1,17 @@
+'use client'
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Props = {
   userType: 'user' | 'admin';
 };
 
 export const DashboardSidebar = ({ userType }: Props) => {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    router.push("/")
+  }
   return (
     <div className="bg-gray-800 text-white p-4 w-60 h-full">
       <div className="flex items-center mb-4">
@@ -32,6 +39,9 @@ export const DashboardSidebar = ({ userType }: Props) => {
             <li>
               <Link href="/dashboard/user/setting" className="block">各種設定</Link>
             </li>
+            <li>
+              <button className="mb-2" onClick={handleLogout}>ログアウト</button>
+            </li>
           </>
         )}
 
@@ -49,6 +59,9 @@ export const DashboardSidebar = ({ userType }: Props) => {
             </li>
             <li className="mb-2">
               <Link href="/dashboard/admin/setting" className="block">管理者設定</Link>
+            </li>
+            <li>
+              <button className="mb-2" onClick={handleLogout}>ログアウト</button>
             </li>
           </>
         )}
