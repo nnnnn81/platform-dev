@@ -27,10 +27,10 @@ export const DashboardSidebar = ({ userType }: Props) => {
               <Link href="/dashboard/user/applications" className="block">申請一覧</Link>
             </li>
             <li className="mb-2">
-              <Link href="/dashboard/user/setting" className="block">お知らせ</Link>
+              <Link href="/dashboard/user/notifications" className="block">お知らせ</Link>
             </li>
             <li>
-              <Link href="/dashboard/user/notifications" className="block">各種設定</Link>
+              <Link href="/dashboard/user/setting" className="block">各種設定</Link>
             </li>
           </>
         )}
@@ -39,7 +39,7 @@ export const DashboardSidebar = ({ userType }: Props) => {
         {userType === 'admin' && (
           <>
             <li className="mb-2">
-              <Link href="/dashboard/admin/manage-users" className="block">申請一覧</Link>
+              <Link href="/dashboard/admin/applications" className="block">申請一覧</Link>
             </li>
             <li className="mb-2">
               <Link href="/dashboard/admin/notifications" className="block">お知らせ</Link>

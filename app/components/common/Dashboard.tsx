@@ -1,6 +1,6 @@
 export const DashboardContent = () => {
   return (
-    <div className="flex-grow p-6">
+    <div className="flex-grow p-6 bg-gray-100">
       <div className="grid grid-cols-2 gap-4">
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
