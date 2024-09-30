@@ -16,15 +16,6 @@ const UserApplicationPage = () => {
   const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
-    // ダミーデータを使用してアプリケーションリストを設定
-    // const dummyData: Application[] = [
-    //   { id: 1, purpose: 'イベント費用', amount: 5000, status: 'PENDING' },
-    //   { id: 2, purpose: '備品購入', amount: 3000, status: 'PENDING' },
-    //   { id: 3, purpose: '旅行費用', amount: 10000, status: 'APPROVED' },
-    //   { id: 4, purpose: '研修参加費', amount: 15000, status: 'REJECTED' },
-    // ];
-
-    // setApplications(dummyData);
 
     const fetchApplications = async () => {
       const response = await fetch('/api/applications', {

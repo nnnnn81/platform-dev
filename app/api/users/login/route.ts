@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     // JWT トークンを生成
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, { expiresIn: '1h' });
 
     // 成功レスポンスを返す
     return NextResponse.json({ token, user }, { status: 200 });
