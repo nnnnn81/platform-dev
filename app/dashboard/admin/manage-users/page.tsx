@@ -1,5 +1,5 @@
-import { DashboardSidebar } from '@/app/components/Sidebar';
-import { ApplicationList } from '@/app/components/ApplicationList';
+import { DashboardSidebar } from '@/app/components/common/Sidebar';
+import { ApplicationList } from '@/app/components/application/ApplicationList';
 
 const ManageUserPage = () => {
   return (

@@ -1,5 +1,5 @@
 'use client';
-import { ApplicationForm } from '../../components/ApplicationForm';
+import { ApplicationForm } from '../../components/application/ApplicationForm';
 
 const NewApplicationPage = () => {
   return (

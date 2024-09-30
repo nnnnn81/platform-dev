@@ -1,4 +1,4 @@
-import { DashboardSidebar } from '@/app/components/Sidebar';
+import { DashboardSidebar } from '@/app/components/common/Sidebar';
 
 const UserSettingPage = () => {
   return (
