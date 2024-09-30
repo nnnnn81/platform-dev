@@ -1,14 +1,14 @@
-## ローカルで動かす
+ ## ローカルで動かす
 ```bash
 npm run dev
 ```
 
 
-## デプロイ環境で動かす
+## デプロイ環境で動かす（サーバ復旧済み）
 admin email : `admin@mail.com`  
 admin pass : `admin`
 
-testuser email : `tes@gmail.com`  
+testuser email : `test@gmail.com`  
 testuser pass : `test`
 
 ## 操作説明
