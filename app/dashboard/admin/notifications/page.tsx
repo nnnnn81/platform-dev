@@ -1,6 +1,6 @@
 import { DashboardSidebar } from '@/app/components/Sidebar';
 
-const UserDashboardPage = () => {
+const AdminNotificationPage = () => {
   return (
     <div className="flex h-screen">
       <DashboardSidebar userType="admin" />
@@ -9,4 +9,4 @@ const UserDashboardPage = () => {
   );
 };
 
-export default UserDashboardPage;
+export default AdminNotificationPage;

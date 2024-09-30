@@ -1,13 +1,13 @@
 import { DashboardSidebar } from '@/app/components/Sidebar';
 import { ApplicationList } from '@/app/components/ApplicationList';
 
-const UserDashboardPage = () => {
+const AdminApplicationPage = () => {
   return (
     <div className="flex h-screen">
       <DashboardSidebar userType="admin" />
-      hoge
+      申請一覧
     </div>
   );
 };
 
-export default UserDashboardPage;
+export default AdminApplicationPage;

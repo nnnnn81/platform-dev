@@ -1,7 +1,7 @@
 import { DashboardSidebar } from '@/app/components/Sidebar';
 import { ApplicationList } from '@/app/components/ApplicationList';
 
-const UserDashboardPage = () => {
+const ManageUserPage = () => {
   return (
     <div className="flex h-screen">
       <DashboardSidebar userType="admin" />
@@ -10,4 +10,4 @@ const UserDashboardPage = () => {
   );
 };
 
-export default UserDashboardPage;
+export default ManageUserPage;
