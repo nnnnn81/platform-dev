@@ -19,8 +19,6 @@ const UserSettingPage = () => {
 
         <section>
           <h2 className="text-xl font-semibold mb-2">団体から抜ける</h2>
-          <div className="bg-white p-4 rounded shadow">
-          </div>
         </section>
       </div>
     </div>

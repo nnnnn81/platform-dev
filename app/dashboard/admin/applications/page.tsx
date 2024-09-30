@@ -1,5 +1,6 @@
+'use client'
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
-import { ApplicationList } from '@/app/components/application/ApplicationList';
+
 
 const AdminApplicationPage = () => {
   return (

@@ -16,11 +16,12 @@ const AdminSettingPage = () => {
           </div>
         </section>
 
-        <section>
-          <h2 className="text-xl font-semibold mb-2">団体から抜ける</h2>
+        <section className="mb-6">
+          <h2 className="text-xl font-semibold mb-2">パスワードの変更</h2>
           <div className="bg-white p-4 rounded shadow">
           </div>
         </section>
+
       </div>
     </div>
   );
