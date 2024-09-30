@@ -18,7 +18,7 @@ export const ApplicationList = ({ applications }: { applications: Array<any> }) 
               <td>{application.purpose}</td>
               <td>{application.amount}</td>
               <td>{application.status}</td>
-              <td>{new Date(application.created_at).toLocaleDateString()}</td>
+              <td>{new Date(application.createdAt).toLocaleDateString()}</td>
             </tr>
           ))}
         </tbody>

@@ -1,5 +1,6 @@
 'use client'
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -7,16 +8,55 @@ type Props = {
 };
 
 export const DashboardSidebar = ({ userType }: Props) => {
+  const [username, setUsername] = useState<string>('');
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/");
+        return;
+      }
+
+      try {
+        // API からユーザー情報を取得
+        const response = await fetch('/api/users', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          setUsername(userData.name);  // ユーザー名をステートに設定
+        } else {
+          console.error('Failed to fetch user info:', response.statusText);
+          router.push("/"); // エラー時にはホームにリダイレクト
+        }
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+        router.push("/"); // エラー時にはホームにリダイレクト
+      }
+    };
+
+    fetchUserInfo();
+  }, [router]);
+
   const handleLogout = () => {
-    localStorage.removeItem("token")
-    router.push("/")
+    localStorage.removeItem("token");
+    router.push("/");
   }
+
   return (
     <div className="bg-gray-800 text-white p-4 w-60 h-full">
+      {/* ユーザー情報を表示 */}
       <div className="flex items-center mb-4">
         <span className="material-icons">account_circle</span>
-        <span className="ml-2">{userType === 'user' ? 'User' : 'Admin'}</span>
+        <span className="ml-2">
+          {username || 'ユーザー名を取得中...'}
+        </span>
       </div>
 
       <ul>

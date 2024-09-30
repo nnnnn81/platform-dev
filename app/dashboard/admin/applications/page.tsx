@@ -17,51 +17,67 @@ const AdminApplicationsPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAdmin = () => {
+    const checkAdmin = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        // トークンが存在しない場合はリダイレクト
+        // トークンが存在しない場合はログアウト処理
         localStorage.removeItem('token');
-        router.push('/'); // 適切なログインページにリダイレクト
+        router.push('/'); // ログインページにリダイレクト
         return;
       }
 
+      // 既存のユーザー情報を取得するAPIを利用
       try {
-        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-        if (decoded.role === 'ADMIN') {
-          setIsAdmin(true); // 管理者の場合
+        const response = await fetch('/api/users', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+
+          // 管理者かどうかを確認
+          if (userData.role === 'ADMIN') {
+            setIsAdmin(true);
+
+            // 申請データを取得する処理
+            const fetchApplications = async () => {
+              const appResponse = await fetch('/api/applications/admin', {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+              if (appResponse.ok) {
+                const appData = await appResponse.json();
+                setApplications(appData);
+              } else {
+                console.error('Error fetching applications:', appResponse.statusText);
+              }
+            };
+
+            fetchApplications();
+          } else {
+            // 管理者でない場合はユーザーダッシュボードにリダイレクト
+            router.push('/dashboard/user');
+          }
         } else {
-          router.push('/dashboard/user'); // 管理者でない場合はホームにリダイレクト
+          // ユーザー情報の取得に失敗した場合
+          console.error('Error fetching user data:', response.statusText);
+          router.push('/dashboard/user');
         }
       } catch (error) {
-        console.error('Token verification failed:', error);
-        router.push('/dashboard/user'); // トークン検証に失敗した場合もリダイレクト
+        console.error('Error verifying admin status:', error);
+        router.push('/dashboard/user');
       }
     };
 
     checkAdmin();
   }, [router]);
 
-  useEffect(() => {
-    if (!isAdmin) return; // 管理者でない場合はデータを取得しない
 
-    const fetchApplications = async () => {
-      const response = await fetch('/api/applications/admin', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        setApplications(data);
-      } else {
-        console.error('Error fetching applications:', response.statusText);
-      }
-    };
-
-    fetchApplications();
-  }, [isAdmin]);
 
   const handleUpdateStatus = async (id: number, status: string) => {
     const response = await fetch(`/api/applications/${id}`, {
@@ -99,9 +115,9 @@ const AdminApplicationsPage = () => {
         <h1 className="text-2xl font-bold mb-6">申請一覧</h1>
 
         {/* 現在申請中の申請 */}
-        <h2 className="text-xl font-semibold mb-4">現在申請中</h2>
+        <h2 className="text-xl font-semibold mb-4">承認待ち</h2>
         {pendingApplications.length === 0 ? (
-          <p className="text-gray-500">現在、申請中のものはありません。</p>
+          <p className="text-gray-500">現在、承認待ちの申請はありません。</p>
         ) : (
           <table className="min-w-full bg-white border border-gray-300 mb-6">
             <thead>
@@ -119,18 +135,24 @@ const AdminApplicationsPage = () => {
                   <td className="py-2 px-4 border-b">{application.amount}</td>
                   <td className="py-2 px-4 border-b">{application.status}</td>
                   <td className="py-2 px-4 border-b">
-                    <button
-                      onClick={() => handleUpdateStatus(application.id, 'APPROVED')}
-                      className="mr-2 text-green-600 hover:underline"
-                    >
-                      承認
-                    </button>
-                    <button
-                      onClick={() => handleUpdateStatus(application.id, 'REJECTED')}
-                      className="text-red-600 hover:underline"
-                    >
-                      却下
-                    </button>
+                    <div className='flex space-x-2'>
+
+                      <button
+                        onClick={() => handleUpdateStatus(application.id, 'APPROVED')}
+                        className="mr-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex items-center"
+                      >
+                        <span className="material-icons mr-1">check_circle</span>
+                        承認
+                      </button>
+
+                      <button
+                        onClick={() => handleUpdateStatus(application.id, 'REJECTED')}
+                        className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex items-center"
+                      >
+                        <span className="material-icons mr-1">cancel</span>
+                        却下
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
