@@ -16,7 +16,12 @@ export const LoginForm = () => {
 
       localStorage.setItem('token', response.data.token);
 
-      router.push('/dashboard/user');
+      if (response.data.user.role == "ADMIN") {
+        router.push('/dashboard/admin');
+      }
+      else {
+        router.push('/dashboard/user');
+      }
     } catch (err: any) {
       setError(err.response?.data?.error || 'Login failed. Please try again.');
     }

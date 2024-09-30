@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
+import jwt from 'jsonwebtoken';
 
 interface Application {
   id: number;
@@ -13,9 +14,38 @@ interface Application {
 
 const AdminApplicationsPage = () => {
   const [applications, setApplications] = useState<Application[]>([]);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
+    const checkAdmin = () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // トークンが存在しない場合はリダイレクト
+        localStorage.removeItem('token');
+        router.push('/'); // 適切なログインページにリダイレクト
+        return;
+      }
+
+      try {
+        const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+        if (decoded.role === 'ADMIN') {
+          setIsAdmin(true); // 管理者の場合
+        } else {
+          router.push('/dashboard/user'); // 管理者でない場合はホームにリダイレクト
+        }
+      } catch (error) {
+        console.error('Token verification failed:', error);
+        router.push('/dashboard/user'); // トークン検証に失敗した場合もリダイレクト
+      }
+    };
+
+    checkAdmin();
+  }, [router]);
+
+  useEffect(() => {
+    if (!isAdmin) return; // 管理者でない場合はデータを取得しない
+
     const fetchApplications = async () => {
       const response = await fetch('/api/applications/admin', {
         method: 'GET',
@@ -30,8 +60,9 @@ const AdminApplicationsPage = () => {
         console.error('Error fetching applications:', response.statusText);
       }
     };
+
     fetchApplications();
-  }, []);
+  }, [isAdmin]);
 
   const handleUpdateStatus = async (id: number, status: string) => {
     const response = await fetch(`/api/applications/${id}`, {
