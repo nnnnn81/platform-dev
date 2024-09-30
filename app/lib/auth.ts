@@ -1,8 +1,8 @@
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-export const verifyToken = async (req: NextApiRequest) => {
-  const token = req.headers.authorization?.split(' ')[1];
+export async function verifyToken(req: NextRequest) {
+  const token = req.headers.get('Authorization')?.split(' ')[1];
   if (!token) return null;
 
   try {
@@ -10,7 +10,7 @@ export const verifyToken = async (req: NextApiRequest) => {
     return decoded as {
       role: string; userId: number
     };
-  } catch (error) {
+  } catch (err) {
     return null;
   }
-};
+}

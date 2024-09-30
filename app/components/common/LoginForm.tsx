@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth', { email, password });
+      const response = await axios.post('/api/users/login', { email, password });
 
       localStorage.setItem('token', response.data.token);
 

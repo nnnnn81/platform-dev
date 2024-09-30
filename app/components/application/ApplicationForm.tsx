@@ -1,15 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { DashboardSidebar } from '@/app/components/common/Sidebar';
 
 const NewApplicationPage = () => {
-  // フォームの状態を管理するフック
   const [purpose, setPurpose] = useState(''); // 用途
   const [amount, setAmount] = useState('');   // 金額
   const router = useRouter();
 
   // フォーム送信時の処理
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // フォームのバリデーションチェック
@@ -24,11 +22,28 @@ const NewApplicationPage = () => {
       return;
     }
 
-    // 簡易的な申請データの送信（例: コンソール表示）
-    console.log('申請内容:', { purpose, amount });
+    try {
+      const response = await fetch('/api/applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          purpose,
+          amount: Number(amount),
+        }),
+      });
 
-    // 申請が成功した後、申請一覧ページにリダイレクト
-    router.push('/dashboard/user/applications');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || '申請の送信に失敗しました');
+      }
+
+      router.push('/dashboard/user/applications');
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   return (

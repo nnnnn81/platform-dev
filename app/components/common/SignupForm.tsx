@@ -13,7 +13,7 @@ export const SignupForm = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/signup', { name, email, password });
+      const response = await axios.post('/api/users', { name, email, password });
 
       localStorage.setItem('token', response.data.token);
 
