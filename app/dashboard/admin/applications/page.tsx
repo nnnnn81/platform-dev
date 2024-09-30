@@ -1,8 +1,8 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { NextResponse } from 'next/server';
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
+
 interface Application {
   id: number;
   purpose: string;
@@ -13,20 +13,16 @@ interface Application {
 
 const AdminApplicationsPage = () => {
   const [applications, setApplications] = useState<Application[]>([]);
-
   const router = useRouter();
 
-
   useEffect(() => {
-
     const fetchApplications = async () => {
       const response = await fetch('/api/applications/admin', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-      }
-      ); // すべての申請を取得
+      }); // すべての申請を取得
       if (response.ok) {
         const data = await response.json();
         setApplications(data);
@@ -62,13 +58,20 @@ const AdminApplicationsPage = () => {
     }
   };
 
+  // ステータスがPENDINGの申請のみをフィルタリング
+  const pendingApplications = applications.filter(app => app.status === 'PENDING');
+  // ステータスがAPPROVEDまたはREJECTEDの申請をフィルタリング
+  const historyApplications = applications.filter(app => app.status === 'APPROVED' || app.status === 'REJECTED');
 
   return (
     <div className="flex h-screen">
       <DashboardSidebar userType="user" />
       <div className="flex-1 p-8 bg-gray-100">
         <h1 className="text-2xl font-bold mb-6">申請一覧</h1>
-        <table className="min-w-full bg-white border border-gray-300">
+
+        {/* 現在申請中の申請 */}
+        <h2 className="text-xl font-semibold mb-4">現在申請中</h2>
+        <table className="min-w-full bg-white border border-gray-300 mb-6">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b">用途</th>
@@ -78,7 +81,7 @@ const AdminApplicationsPage = () => {
             </tr>
           </thead>
           <tbody>
-            {applications.map((application) => (
+            {pendingApplications.map((application) => (
               <tr key={application.id}>
                 <td className="py-2 px-4 border-b">{application.purpose}</td>
                 <td className="py-2 px-4 border-b">{application.amount}</td>
@@ -97,6 +100,27 @@ const AdminApplicationsPage = () => {
                     却下
                   </button>
                 </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* 履歴セクション */}
+        <h2 className="text-xl font-semibold mb-4">申請履歴</h2>
+        <table className="min-w-full bg-white border border-gray-300">
+          <thead>
+            <tr>
+              <th className="py-2 px-4 border-b">用途</th>
+              <th className="py-2 px-4 border-b">金額</th>
+              <th className="py-2 px-4 border-b">ステータス</th>
+            </tr>
+          </thead>
+          <tbody>
+            {historyApplications.map((application) => (
+              <tr key={application.id}>
+                <td className="py-2 px-4 border-b">{application.purpose}</td>
+                <td className="py-2 px-4 border-b">{application.amount}</td>
+                <td className="py-2 px-4 border-b">{application.status}</td>
               </tr>
             ))}
           </tbody>

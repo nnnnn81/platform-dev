@@ -9,7 +9,6 @@ interface Application {
   purpose: string;
   amount: number;
   status: string;
-  // その他のプロパティも必要に応じて追加
 }
 
 const UserApplicationPage = () => {
@@ -34,6 +33,8 @@ const UserApplicationPage = () => {
     };
     fetchApplications();
   }, []);
+  const pendingApplications = applications.filter(app => app.status === 'PENDING');
+  const pastApplications = applications.filter(app => app.status !== 'PENDING');
 
   return (
     <div className="flex h-screen">
@@ -48,14 +49,14 @@ const UserApplicationPage = () => {
         <section className="mb-6">
           <h2 className="text-xl font-semibold mb-2">現在申請中</h2>
           <div className="bg-white p-4 rounded shadow">
-            <ApplicationList applications={applications} />
+            <ApplicationList applications={pendingApplications} />
           </div>
         </section>
 
         <section>
           <h2 className="text-xl font-semibold mb-2">過去の申請</h2>
           <div className="bg-white p-4 rounded shadow">
-            <ApplicationList applications={applications} />
+            <ApplicationList applications={pastApplications} />
           </div>
         </section>
       </div>
