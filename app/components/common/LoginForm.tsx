@@ -1,19 +1,50 @@
 'use client';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ログイン処理を追加
-    router.push('/dashboard/user'); // ログイン成功後にユーザーのダッシュボードへ遷移
+    try {
+      const response = await axios.post('/api/auth', { email, password });
+
+      localStorage.setItem('token', response.data.token);
+
+      router.push('/dashboard/user');
+    } catch (err) {
+      setError(err.response?.data?.error || 'Login failed. Please try again.');
+    }
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <input type="text" placeholder="Email" className="input input-bordered w-full mb-4" required />
-      <input type="password" placeholder="Password" className="input input-bordered w-full mb-4" required />
+    <form onSubmit={handleLogin} className="w-full max-w-md">
+      <div className="mb-4">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input input-bordered w-full"
+          required
+        />
+      </div>
+      <div className="mb-4">
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="input input-bordered w-full"
+          required
+        />
+      </div>
+      {error && <p className="text-red-500 mb-4">{error}</p>}
       <button type="submit" className="btn btn-primary w-full">Login</button>
     </form>
   );
