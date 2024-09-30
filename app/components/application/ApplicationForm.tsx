@@ -40,7 +40,7 @@ const NewApplicationPage = () => {
       }
 
       router.push('/dashboard/user/applications');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       alert(error.message);
     }

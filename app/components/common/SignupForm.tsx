@@ -18,7 +18,7 @@ export const SignupForm = () => {
       localStorage.setItem('token', response.data.token);
 
       router.push('/dashboard/user');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.response?.data?.error || 'Signup failed. Please try again.');
     }
   };

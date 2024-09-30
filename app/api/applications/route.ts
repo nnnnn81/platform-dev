@@ -2,29 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import { verifyToken } from '@/app/lib/auth';
 
-// ** GET リクエストのハンドラー **
-// 特定のアプリケーションを取得
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest) {
   try {
     const user = await verifyToken(req);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const application = await prisma.application.findUnique({
-      where: { id: Number(params.id) },
+    const applications = await prisma.application.findMany({
+      where: { userId: user.userId },
     });
 
-    if (!application || application.userId !== user.userId) {
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(application, { status: 200 });
+    return NextResponse.json(applications, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: 'Error fetching application' }, { status: 500 });
+    return NextResponse.json({ error: 'Error fetching applications' }, { status: 500 });
   }
 }
-
 // ** POST リクエストのハンドラー **
 // 新しいアプリケーションを作成
 export async function POST(req: NextRequest) {
