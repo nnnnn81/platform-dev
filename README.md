@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
+## ローカルで動かす
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## デプロイ環境で動かす
+admin email : `admin@mail.com`  
+admin pass : `admin`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+testuser email : `tes@gmail.com`  
+testuser pass : `test`
 
-## Learn More
+## 操作説明
+### ホーム
+### 申請一覧
+[user]  
+これまでの申請を申請中と承認後に分けて確認できる  
+「新しい申請を作成」ボタンを押すと申請作成画面へ遷移する  
+申請を作成すると一覧に追加される
 
-To learn more about Next.js, take a look at the following resources:
+[admin]  
+所属するユーザすべての申請を承認待ちと承認後に分けて確認できる  
+承認待ちの申請に対しては「承認」「却下」が選べ、選択後はそれぞれステータスが更新される
+### お知らせ
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 設定
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### ログアウト
+押下するとログアウトしてログイン画面に戻る
