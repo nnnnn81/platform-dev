@@ -5,7 +5,7 @@ import { verifyToken } from '@/app/lib/auth';
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, password, role } = await req.json();
+    const { name, email, password } = await req.json();
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
         name,
         email,
         password: hashedPassword,
-        role,
+        role: "USER",
       },
     });
 
