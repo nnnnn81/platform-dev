@@ -1,5 +1,6 @@
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
 import { ApplicationList } from '@/app/components/application/ApplicationList';
+import Link from 'next/link';
 
 const UserApplicationPage = () => {
   return (
@@ -9,7 +10,7 @@ const UserApplicationPage = () => {
       <div className="flex-1 p-8 bg-gray-100">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">申請一覧</h1>
-          <button className="btn btn-primary">新しい申請を作成する</button>
+          <Link href="applications/new" className="btn btn-primary">新しい申請を作成する</Link>
         </div>
 
         <section className="mb-6">
