@@ -3,18 +3,18 @@ import prisma from '@/app/lib/prisma';
 import { verifyToken } from '@/app/lib/auth';
 
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest) {
   try {
     const user = await verifyToken(req);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const application = await prisma.application.findUnique({
-      where: { id: Number(params.id) },
+    const application = await prisma.application.findMany({
+      where: { userId: Number(user.userId) },
     });
 
-    if (!application || application.userId !== user.userId) {
+    if (!application) {
       return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
 
