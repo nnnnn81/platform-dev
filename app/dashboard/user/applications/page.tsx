@@ -22,7 +22,7 @@ const UserApplicationPage = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-      }); // すべての申請を取得
+      });
       if (response.ok) {
         const data = await response.json();
         setApplications(data);

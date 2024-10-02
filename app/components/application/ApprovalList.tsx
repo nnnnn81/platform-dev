@@ -1,6 +1,6 @@
 export const ApprovalList = ({ applications }: { applications: Array<any> }) => {
   const handleApproval = (id: number, status: 'approved' | 'rejected') => {
-    // 承認または拒否のロジックを追加
+    承認または拒否のロジックを追加
   };
 
   return (

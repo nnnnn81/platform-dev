@@ -21,13 +21,12 @@ const AdminApplicationsPage = () => {
     const checkAdmin = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        // トークンが存在しない場合はログアウト処理
+
         localStorage.removeItem('token');
-        router.push('/'); // ログインページにリダイレクト
+        router.push('/');
         return;
       }
 
-      // 既存のユーザー情報を取得するAPIを利用
       try {
         const response = await fetch('/api/users', {
           method: 'GET',
@@ -39,11 +38,11 @@ const AdminApplicationsPage = () => {
         if (response.ok) {
           const userData = await response.json();
 
-          // 管理者かどうかを確認
+
           if (userData.role === 'ADMIN') {
             setIsAdmin(true);
 
-            // 申請データを取得する処理
+
             const fetchApplications = async () => {
               const appResponse = await fetch('/api/applications/admin', {
                 method: 'GET',
@@ -61,11 +60,11 @@ const AdminApplicationsPage = () => {
 
             fetchApplications();
           } else {
-            // 管理者でない場合はユーザーダッシュボードにリダイレクト
+
             router.push('/dashboard/user');
           }
         } else {
-          // ユーザー情報の取得に失敗した場合
+
           console.error('Error fetching user data:', response.statusText);
           router.push('/dashboard/user');
         }
@@ -113,9 +112,9 @@ const AdminApplicationsPage = () => {
     }
   };
 
-  // ステータスがPENDINGの申請のみをフィルタリング
+
   const pendingApplications = applications.filter(app => app.status === 'PENDING');
-  // ステータスがAPPROVEDまたはREJECTEDの申請をフィルタリング
+
   const historyApplications = applications.filter(app => app.status === 'APPROVED' || app.status === 'REJECTED');
 
   return (

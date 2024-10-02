@@ -2,21 +2,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const NewApplicationPage = () => {
-  const [purpose, setPurpose] = useState(''); // 用途
-  const [amount, setAmount] = useState('');   // 金額
+  const [purpose, setPurpose] = useState('');
+  const [amount, setAmount] = useState('');
   const router = useRouter();
 
-  // フォーム送信時の処理
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // フォームのバリデーションチェック
     if (purpose.trim() === '' || amount.trim() === '') {
       alert('用途と金額を入力してください');
       return;
     }
 
-    // 金額が数値かどうかを確認
     if (isNaN(Number(amount))) {
       alert('金額は数値で入力してください');
       return;
@@ -34,20 +31,7 @@ const NewApplicationPage = () => {
           amount: Number(amount),
         }),
       });
-
-      const response2 = await fetch('/api/notifications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          userId: 1,
-          message: "承認申請が来ています",
-        }),
-      });
-
-      if (!response.ok || !response2.ok) {
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || '申請の送信に失敗しました');
       }

@@ -20,7 +20,6 @@ export const DashboardSidebar = ({ userType }: Props) => {
       }
 
       try {
-        // API からユーザー情報を取得
         const response = await fetch('/api/users', {
           method: 'GET',
           headers: {
@@ -30,14 +29,14 @@ export const DashboardSidebar = ({ userType }: Props) => {
 
         if (response.ok) {
           const userData = await response.json();
-          setUsername(userData.name);  // ユーザー名をステートに設定
+          setUsername(userData.name);
         } else {
           console.error('Failed to fetch user info:', response.statusText);
-          router.push("/"); // エラー時にはホームにリダイレクト
+          router.push("/");
         }
       } catch (error) {
         console.error('Error fetching user info:', error);
-        router.push("/"); // エラー時にはホームにリダイレクト
+        router.push("/");
       }
     };
 

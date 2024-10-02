@@ -4,7 +4,6 @@ import { verifyToken } from '@/app/lib/auth';
 
 export async function GET(req: NextRequest) {
   const user = await verifyToken(req);
-  console.log(user)
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -13,7 +12,9 @@ export async function GET(req: NextRequest) {
     const notifications = await prisma.notification.findMany({
       where: { userId: user.userId },
       orderBy: { createdAt: 'desc' },
+      include: { application: true },
     });
+
     return NextResponse.json(notifications, { status: 200 });
   } catch (error) {
     console.error('Error fetching notifications:', error);
@@ -21,27 +22,6 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const user = await verifyToken(req);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { userId, message } = await req.json(); // Next.js 14では`req.json()`でパース
-    const notification = await prisma.notification.create({
-      data: {
-        userId: userId,
-        message: message,
-        isRead: false,
-      },
-    });
-
-    return NextResponse.json(notification, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Error creating application' }, { status: 500 });
-  }
-}
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -60,7 +40,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     return NextResponse.json(notification, { status: 200 });
   } catch (error: any) {
-    if (error.code === 'P2025') { // Application not found error
+    if (error.code === 'P2025') {
       return NextResponse.json({ error: 'Application not found' }, { status: 404 });
     }
     console.error('Error approving application:', error);

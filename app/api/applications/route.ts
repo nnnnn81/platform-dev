@@ -18,16 +18,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Error fetching applications' }, { status: 500 });
   }
 }
-// ** POST リクエストのハンドラー **
-// 新しいアプリケーションを作成
-export async function POST(req: NextRequest) {
-  try {
-    const user = await verifyToken(req);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
-    const { purpose, amount } = await req.json(); // Next.js 14では`req.json()`でパース
+export async function POST(req: NextRequest) {
+
+  const user = await verifyToken(req);
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { purpose, amount } = await req.json();
+
+  try {
     const application = await prisma.application.create({
       data: {
         userId: user.userId,
@@ -36,14 +37,26 @@ export async function POST(req: NextRequest) {
         status: 'PENDING',
       },
     });
+    const username = await prisma.user.findUnique({
+      where: { id: user.userId },
+    });
 
-    return NextResponse.json(application, { status: 201 });
+    await prisma.notification.create({
+      data: {
+        userId: 1,
+        applicationId: application.id,
+        message: `${username?.name}から承認申請が来ています`,
+      },
+    });
+
+    return NextResponse.json(application, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: 'Error creating application' }, { status: 500 });
+    console.error('Error updating application:', error);
+    return NextResponse.json({ error: 'Error updating application' }, { status: 500 });
   }
 }
 
-// ** OPTIONS メソッドに対応 **
+
 export async function OPTIONS() {
   return NextResponse.json({}, { status: 204, headers: { Allow: 'GET, POST, OPTIONS' } });
 }

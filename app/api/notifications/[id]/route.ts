@@ -11,18 +11,15 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     const { id } = params;
 
-
-    const notification = await prisma.notification.update({
+    const updatedNotification = await prisma.notification.update({
       where: { id: Number(id) },
       data: { isRead: true },
     });
 
-    return NextResponse.json(notification, { status: 200 });
-  } catch (error: any) {
-    if (error.code === 'P2025') { // Application not found error
-      return NextResponse.json({ error: 'Application not found' }, { status: 404 });
-    }
-    console.error('Error approving application:', error);
-    return NextResponse.json({ error: 'Error approving application' }, { status: 500 });
+
+    return NextResponse.json(updatedNotification, { status: 200 });
+  } catch (error) {
+    console.error('Error updating notification status:', error);
+    return NextResponse.json({ error: 'Error updating notification status' }, { status: 500 });
   }
 }

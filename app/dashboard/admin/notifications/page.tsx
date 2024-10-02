@@ -1,7 +1,48 @@
+'use client'
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
 import { NotificationList } from '@/app/components/notification/notificationList';
+import { useEffect, useState } from 'react';
+
+type Notification = {
+  id: number;
+  userId: number;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+  application?: {
+    id: number;
+    purpose: string;
+    amount: number;
+  };
+};
 
 const AdminNotificationPage = () => {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await fetch('/api/notifications', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+      } else {
+        console.error('Failed to fetch notifications');
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
   return (
     <div className="flex h-screen">
       <DashboardSidebar userType="admin" />
@@ -13,7 +54,7 @@ const AdminNotificationPage = () => {
         <section className="mb-6">
 
           <div className="bg-white p-4 rounded shadow">
-            <NotificationList />
+            <NotificationList notifications={notifications} />
           </div>
         </section>
       </div>
