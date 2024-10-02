@@ -107,7 +107,7 @@ const AdminApplicationsPage = () => {
 
   const pendingApplications = applications.filter(app => app.status === 'PENDING');
 
-  const historyApplications = applications.filter(app => app.status === 'APPROVED' || app.status === 'REJECTED');
+  const historyApplications = applications.filter(app => app.status === 'APPROVED');
 
   return (
     <div className="flex h-screen">
@@ -162,7 +162,7 @@ const AdminApplicationsPage = () => {
         )}
 
         {/* 履歴セクション */}
-        <h2 className="text-xl font-semibold mb-4">申請履歴</h2>
+        <h2 className="text-xl font-semibold mb-4">承認済みの申請履歴</h2>
         {historyApplications.length === 0 ? (
           <p className="text-gray-500">申請履歴はありません。</p>
         ) : (
