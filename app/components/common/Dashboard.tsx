@@ -130,7 +130,7 @@ export const DashboardContent = () => {
               {notifications.length === 0 ? (
                 <p>お知らせはありません</p>
               ) : (
-                notifications.map((notification) => (
+                notifications.filter(notification => !notification.isRead).map((notification) => (
                   <li key={notification.id} className="flex justify-between py-2 border-b">
                     <span>・{notification.message}</span>
                     <span className="text-xs text-gray-400">
