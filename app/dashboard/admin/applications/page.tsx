@@ -89,16 +89,8 @@ const AdminApplicationsPage = () => {
       body: JSON.stringify({ status }),
     });
 
-    const response2 = await fetch(`/api/notifications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({ userId: userId, message: `申請が${status}されました` }),
-    });
 
-    if (response.ok && response2.ok) {
+    if (response.ok) {
       const updatedApplication = await response.json();
       if (updatedApplication && updatedApplication.id) {
         setApplications((prev) =>

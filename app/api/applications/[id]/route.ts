@@ -43,6 +43,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!status) {
     return NextResponse.json({ error: 'Status is required' }, { status: 400 });
   }
+  const notificationMessage = status === 'APPROVED'
+    ? '申請が承認されました。'
+    : `申請が却下されました`;
 
   try {
 
@@ -55,7 +58,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       data: {
         userId: application.userId,
         applicationId: application.id,
-        message: `Your application has been ${status.toLowerCase()}.`,
+        message: notificationMessage,
       },
     });
 

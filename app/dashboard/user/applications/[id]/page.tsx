@@ -70,7 +70,7 @@ const ApplicationDetailPage = () => {
           {/* その他の情報を必要に応じて追加 */}
         </div>
         <button
-          onClick={() => router.push('/dashboard/admin/applications')}
+          onClick={() => router.push('/dashboard/user/applications')}
           className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300 ease-in-out"
         >
           戻る
