@@ -1,4 +1,5 @@
 import { DashboardSidebar } from '@/app/components/common/Sidebar';
+import { NotificationList } from '@/app/components/notification/notificationList';
 
 const AdminNotificationPage = () => {
   return (
@@ -12,7 +13,7 @@ const AdminNotificationPage = () => {
         <section className="mb-6">
 
           <div className="bg-white p-4 rounded shadow">
-            {/* <NotificationList status="ongoing" /> */}
+            <NotificationList />
           </div>
         </section>
       </div>

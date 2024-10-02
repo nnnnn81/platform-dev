@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 
 interface Application {
   id: number;
+  userId: number;
   purpose: string;
   amount: number;
   status: string;
@@ -79,7 +80,7 @@ const AdminApplicationsPage = () => {
 
 
 
-  const handleUpdateStatus = async (id: number, status: string) => {
+  const handleUpdateStatus = async (id: number, userId: number, status: string) => {
     const response = await fetch(`/api/applications/${id}`, {
       method: 'PATCH',
       headers: {
@@ -89,7 +90,16 @@ const AdminApplicationsPage = () => {
       body: JSON.stringify({ status }),
     });
 
-    if (response.ok) {
+    const response2 = await fetch(`/api/notifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({ userId: userId, message: `申請が${status}されました` }),
+    });
+
+    if (response.ok && response2.ok) {
       const updatedApplication = await response.json();
       if (updatedApplication && updatedApplication.id) {
         setApplications((prev) =>
@@ -138,7 +148,7 @@ const AdminApplicationsPage = () => {
                     <div className='flex space-x-2'>
 
                       <button
-                        onClick={() => handleUpdateStatus(application.id, 'APPROVED')}
+                        onClick={() => handleUpdateStatus(application.id, application.userId, 'APPROVED')}
                         className="mr-2 px-4 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex items-center"
                       >
                         <span className="material-icons mr-1">check_circle</span>
@@ -146,7 +156,7 @@ const AdminApplicationsPage = () => {
                       </button>
 
                       <button
-                        onClick={() => handleUpdateStatus(application.id, 'REJECTED')}
+                        onClick={() => handleUpdateStatus(application.id, application.userId, 'REJECTED')}
                         className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 flex items-center"
                       >
                         <span className="material-icons mr-1">cancel</span>

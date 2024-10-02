@@ -35,7 +35,19 @@ const NewApplicationPage = () => {
         }),
       });
 
-      if (!response.ok) {
+      const response2 = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          userId: 1,
+          message: "承認申請が来ています",
+        }),
+      });
+
+      if (!response.ok || !response2.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || '申請の送信に失敗しました');
       }
